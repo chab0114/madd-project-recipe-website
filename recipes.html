@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Dev-licious - Find delicious recipes for all occasions">
+        <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline';
+    style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline';
+    font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+    img-src 'self' https://images.unsplash.com https://dummyjson.com https://cdn.dummyjson.com data:;
+    connect-src 'self' https://dummyjson.com;
+">
+        <title>Dev-licious | Recipes</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="./css/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+        <script src="./js/main.js" type="module"></script>
+    </head>
+<body id="recipes">
+    <header class="main-header">
+        <div class="container nav-container">
+            <a href="./index.html" class="logo">Dev-Licious</a>
+            
+            <nav class="main-nav">
+                <ul class="nav-links">
+                    <li><a href="./recipes.html">Recipes</a></li>
+                    <li><a href="./blog.html">Blog</a></li>
+                </ul>
+                
+                <form class="search-form" role="search">
+                    <input type="search" placeholder="Search recipes..." aria-label="Search">
+                    <button type="submit" aria-label="Submit search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="recipes-section">
+            <div class="container">
+                <h1>Recipes</h1>
+                
+                <!-- Filters Section -->
+                <aside class="filter-section">
+                    <div class="filter-container">
+                        <div class="filters-header">
+                            <h2>Filters</h2>
+                      <!-- Meal Type Filter -->
+                      <div class="filter-group">
+                        <span class="filter-label">Meal Type</span>
+                        <div class="filter-dropdown">
+                          <button class="filter-button" data-filter="meal-type">
+                            All
+                            <i class="arrow-icon">▼</i>
+                          </button>
+                          <div class="popup-menu" id="meal-type-menu">
+                            <div class="menu-item">
+                              <input type="radio" id="all" name="meal-type" value="all" checked>
+                              <label for="all">All</label>
+                            </div>
+                            <div class="menu-item">
+                              <input type="radio" id="breakfast" name="meal-type" value="breakfast">
+                              <label for="breakfast">Breakfast</label>
+                            </div>
+                            <div class="menu-item">
+                              <input type="radio" id="lunch" name="meal-type" value="lunch">
+                              <label for="lunch">Lunch</label>
+                            </div>
+                            <div class="menu-item">
+                              <input type="radio" id="dinner" name="meal-type" value="dinner">
+                              <label for="dinner">Dinner</label>
+                            </div>
+                            <div class="menu-item">
+                              <input type="radio" id="dessert" name="meal-type" value="dessert">
+                              <label for="dessert">Dessert</label>
+                            </div>
+                            <div class="menu-item">
+                              <input type="radio" id="snack" name="meal-type" value="snack">
+                              <label for="snack">Snack</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  
+                      <!-- Sort By Filter -->
+                      <div class="filter-group">
+                        <span class="filter-label">Sort By</span>
+                        <div class="filter-dropdown">
+                          <button class="filter-button" data-filter="sort-by">
+                            Select Order
+                            <i class="arrow-icon">▼</i>
+                          </button>
+                          <div class="popup-menu" id="sort-by-menu">
+                            <div class="menu-item">
+                              <input type="radio" id="top-rated" name="sort-by" value="top-rated" checked>
+                              <label for="top-rated">Top Rated</label>
+                            </div>
+                            <div class="menu-item">
+                              <input type="radio" id="name" name="sort-by" value="name">
+                              <label for="name">Name</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                
+                    </div>
+                  </aside>
+
+                <!-- Recipe Cards Grid -->
+                <div class="recipe-grid" id="recipe-grid">
+                    <!-- Recipe cards DummyJson API -->
+
+                </div>
+
+                <!-- Pagination -->
+                <nav class="pagination" aria-label="Recipe pages">
+                    <ul class="pagination-list" id="pagination">
+                        <!-- Pagination by JS -->
+                    </ul>
+                </nav>
+            </div>
+        </section>
+    </main>
+
+    
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="./index.html">Dev-licious</a>
+                </div>
+                <nav class="footer-nav">
+                    <ul>
+                        <li><a href="./recipes.html">Recipes</a></li>
+                        <li><a href="./blog.html">Blog</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="social-links">
+                    <h3>Follow Dev-licious!</h3>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Follow us on Instagram">
+                            <i class="fa-brands fa-square-instagram"></i>
+                        </a>
+                        <a href="#" aria-label="Follow us on X">
+                            <i class="fa-brands fa-square-x-twitter"></i>
+                        </a>
+                        <a href="#" aria-label="Follow us on YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Dev-licious Inc. All Rights Reserved.</p>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+</body>
+</html>
