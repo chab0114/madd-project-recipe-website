@@ -22,6 +22,16 @@ async function loadRecipeDetails(recipeId) {
     try {
         const recipe = await fetchRecipeById(recipeId);
         if (recipe) {
+            
+            if (recipe.name.toLowerCase().includes('borscht') || 
+                recipe.name.toLowerCase().includes('borsch')) {
+                recipe.name = "Ukrainian Borscht";
+                if (recipe.tags) {
+                    recipe.tags = recipe.tags.map(tag => 
+                        tag === "Russian" ? "Ukrainian" : tag
+                    );
+                }
+            }
             displayRecipeDetails(recipe);
             loadLatestRecipes(recipeId);
         } else {

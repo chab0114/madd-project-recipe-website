@@ -1,4 +1,4 @@
-import { fetchTopRecipes } from './api.js';
+import { fetchTopRecipes, fetchRecipeById } from './api.js';
 
 function createLoader() {
     const loader = document.createElement('div');
@@ -44,6 +44,38 @@ function displayRecipes(recipes, container) {
     });
 }
 
+async function initializeTodaysPick() {
+    const todaysPickButton = document.querySelector('.cta-button');
+    if (!todaysPickButton) return;
+
+    try {
+        
+        const recipes = await fetchTopRecipes(100);
+        const borschtRecipe = recipes.find(recipe => 
+            recipe.name.toLowerCase().includes('borscht') || 
+            recipe.name.toLowerCase().includes('borsch')
+        );
+
+        if (borschtRecipe) {
+            
+            borschtRecipe.name = "Ukrainian Borscht";
+            if (borschtRecipe.tags) {
+                borschtRecipe.tags = borschtRecipe.tags.map(tag => 
+                    tag === "Russian" ? "Ukrainian" : tag
+                );
+            }
+            
+            
+            todaysPickButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = `recipe.html?id=${borschtRecipe.id}`;
+            });
+        }
+    } catch (error) {
+        console.error('Error setting up Today\'s Pick:', error);
+    }
+}
+
 export async function initializeHomePage() {
     const recipeGrid = document.getElementById('latest-recipes');
     if (!recipeGrid) return;
@@ -54,6 +86,7 @@ export async function initializeHomePage() {
     try {
         const recipes = await fetchTopRecipes();
         displayRecipes(recipes, recipeGrid);
+        await initializeTodaysPick();
     } catch (error) {
         console.error('Error initializing home page:', error); 
         recipeGrid.innerHTML = '<p class="error">Failed to load recipes. Please try again later.</p>';

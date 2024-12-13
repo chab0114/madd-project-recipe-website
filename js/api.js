@@ -59,6 +59,18 @@ function assignMealType(recipe) {
     return 'dinner';
 }
 
+function normalizeBorschtRecipe(recipe) {
+    if (recipe.name.toLowerCase().includes('borscht') || 
+        recipe.name.toLowerCase().includes('borsch')) {
+        return {
+            ...recipe,
+            name: "Ukrainian Borscht",
+            tags: recipe.tags.map(tag => tag === "Russian" ? "Ukrainian" : tag)
+        };
+    }
+    return recipe;
+}
+
 export async function searchRecipes(query) {
     try {
         const limit = 100;
@@ -74,7 +86,8 @@ export async function searchRecipes(query) {
         const recipesWithMealType = data.recipes.map(recipe => ({
             ...recipe,
             mealType: assignMealType(recipe)
-        }));
+        }))
+        .map(recipe => normalizeBorschtRecipe(recipe)); 
         
         return recipesWithMealType;
     } catch (error) {
@@ -84,21 +97,17 @@ export async function searchRecipes(query) {
 
 export async function fetchTopRecipes(limit = 6) {
     try {
-       
         const recentlyViewed = getRecentlyViewed(limit);
         console.log('Recently viewed:', recentlyViewed);
-        
         
         if (recentlyViewed.length >= limit) {
             return recentlyViewed.slice(0, limit);
         }
         
-        
         const remainingCount = limit - recentlyViewed.length;
         const response = await fetch(`${API_BASE_URL}?limit=20`);
         if (!response.ok) throw new Error('Failed to fetch recipes');
         const data = await response.json();
-        
         
         const existingIds = recentlyViewed.map(r => r.id);
         const additionalRecipes = data.recipes
@@ -107,8 +116,8 @@ export async function fetchTopRecipes(limit = 6) {
                 ...recipe,
                 mealType: assignMealType(recipe)
             }))
+            .map(recipe => normalizeBorschtRecipe(recipe)) 
             .slice(0, remainingCount);
-        
         
         return [...recentlyViewed, ...additionalRecipes];
     } catch (error) {
@@ -139,13 +148,15 @@ export async function fetchRecipeById(id) {
             mealType: assignMealType(recipe)
         };
 
+        const normalizedRecipe = normalizeBorschtRecipe(recipeWithMealType);
+
         const finalRecipe = {
-            ...recipeWithMealType,
-            difficulty: recipe.difficulty || 'Medium',
-            servings: recipe.servings || 4,
-            reviewCount: recipe.reviewCount || Math.floor(Math.random() * 200) + 50,
-            rating: recipe.rating || 4.5,
-            cookTimeMinutes: recipe.cookTimeMinutes || 30
+            ...normalizedRecipe,
+            difficulty: normalizedRecipe.difficulty || 'Medium',
+            servings: normalizedRecipe.servings || 4,
+            reviewCount: normalizedRecipe.reviewCount || Math.floor(Math.random() * 200) + 50,
+            rating: normalizedRecipe.rating || 4.5,
+            cookTimeMinutes: normalizedRecipe.cookTimeMinutes || 30
         };
 
         addToRecentlyViewed(finalRecipe);
