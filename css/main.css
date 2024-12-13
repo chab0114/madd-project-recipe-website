@@ -938,7 +938,10 @@ align-items: flex-end;
 
 /* Main Recipe Section */
 .recipes-section {
-padding-top: var(--spacing-xxl); 
+  padding-top: var(--spacing-xxl);
+  min-height: calc(100vh - 400px); 
+  display: flex;                   
+  flex-direction: column;
 }
 
 .recipes-section h1 {

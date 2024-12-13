@@ -74,12 +74,33 @@ function normalizeBorschtRecipe(recipe) {
 export async function searchRecipes(query) {
     try {
         const limit = 100;
+        
+       
+        const mealTypes = ['breakfast', 'lunch', 'dinner', 'dessert', 'snack'];
+        const isSearchingMealType = mealTypes.includes(query.toLowerCase());
+        
+        
+        if (isSearchingMealType) {
+            const response = await fetch(`${API_BASE_URL}?limit=${limit}`);
+            if (!response.ok) throw new Error('Failed to fetch recipes');
+            
+            const data = await response.json();
+            const recipesWithMealType = data.recipes.map(recipe => ({
+                ...recipe,
+                mealType: assignMealType(recipe)
+            }))
+            .map(recipe => normalizeBorschtRecipe(recipe))
+            .filter(recipe => recipe.mealType.toLowerCase() === query.toLowerCase());
+            
+            return recipesWithMealType;
+        }
+        
+        
         const url = query ? 
             `${API_BASE_URL}/search?q=${encodeURIComponent(query)}&limit=${limit}` :
             `${API_BASE_URL}?limit=${limit}`;
         
         const response = await fetch(url);
-        
         if (!response.ok) throw new Error('Failed to search recipes');
         
         const data = await response.json();
@@ -87,7 +108,7 @@ export async function searchRecipes(query) {
             ...recipe,
             mealType: assignMealType(recipe)
         }))
-        .map(recipe => normalizeBorschtRecipe(recipe)); 
+        .map(recipe => normalizeBorschtRecipe(recipe));
         
         return recipesWithMealType;
     } catch (error) {
@@ -128,7 +149,7 @@ export async function fetchTopRecipes(limit = 6) {
 
 export async function fetchRecipeById(id) {
     try {
-        const response = await fetch(`${API_BASE_URL}`);
+        const response = await fetch(`${API_BASE_URL}/${id}`);
         if (!response.ok) {
             if (response.status === 404) {
                 throw new Error('Recipe not found');
@@ -136,12 +157,7 @@ export async function fetchRecipeById(id) {
             throw new Error('Failed to fetch recipe');
         }
         
-        const data = await response.json();
-        const recipe = data.recipes.find(r => r.id === parseInt(id));
-        
-        if (!recipe) {
-            throw new Error('Recipe not found');
-        }
+        const recipe = await response.json();
         
         const recipeWithMealType = {
             ...recipe,
