@@ -3,8 +3,8 @@
   --color-primary: #2B4743;
   --color-secondary: #F7E4D7;
   --color-third: #FFFAF6;
-  --color-accent: #E67550;
-  --color-accent-hover: #D35A35;
+  --color-accent: #C24A28;/*originaly was #E67550, but to remove contrast errors - changed it. I liked original more*/
+  --color-accent-hover: #A13B1D; /*originaly was #D35A35, but to remove contrast errors - changed it. I liked original more*/
   --color-text: #2B2B2B;
   --color-text-light: #FFFFFF;
   --color-background: #FFFFFF;
@@ -707,11 +707,20 @@ z-index: 1000;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
 }
 
+.recipe-card .recipe-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+  outline: none; 
+}
+
+
 .recipe-grid article:hover,
-.recipe-card:hover {
+.recipe-card:hover,
+.recipe-card .recipe-link:focus-visible {
   transform: translateY(-4px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
@@ -731,9 +740,17 @@ z-index: 1000;
   transition: transform 0.3s ease;
 }
 
+
 .recipe-grid article:hover .recipe-image img,
-.recipe-card:hover .recipe-image img {
+.recipe-card:hover .recipe-image img,
+.recipe-card .recipe-link:focus-visible .recipe-image img {
   transform: scale(1.05);
+}
+
+
+.recipe-card .recipe-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 /* Meal Type Badge */
@@ -837,19 +854,18 @@ display: flex;
 flex-direction: column;
 align-items: flex-end;
   font-family: var(--font-logo);
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   margin-bottom: var(--spacing-l);
   text-align: end;
   white-space: pre-line;
   margin-left: auto;
+  color: var(--color-accent);
 }
 
-.newsletter h2::before {
-content: "Sign up for the";
-}
-
-.newsletter h2::after {
-content: "Dev-licious newsletter!";
+.newsletter h2 span {
+  display: block;
+  text-align: end;
+  color: var(--color-accent);
 }
 
 .newsletter p {

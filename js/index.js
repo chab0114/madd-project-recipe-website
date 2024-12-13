@@ -17,27 +17,25 @@ function displayRecipes(recipes, container) {
         const article = document.createElement('article');
         article.className = 'recipe-card';
         
-        article.addEventListener('click', () => {
-            window.location.href = `recipe.html?id=${recipe.id}`;
-        });
-        
         article.innerHTML = `
-            <div class="recipe-image">
-                <img src="${recipe.image}" alt="${recipe.name}">
-            </div>
-            <div class="recipe-content">
-                <h3 class="recipe-title">${recipe.name}</h3>
-                <div class="recipe-tags">
-                    ${recipe.tags?.slice(0, 2).map(tag => `<span class="tag">${tag}</span>`).join('') || ''}
-                    <span class="meal-type-badge">${recipe.mealType}</span>
+            <a href="recipe.html?id=${recipe.id}" class="recipe-link">
+                <div class="recipe-image">
+                    <img src="${recipe.image}" alt="${recipe.name}">
                 </div>
-                <div class="recipe-meta">
-                    <span class="servings"><i class="fas fa-users"></i>${recipe.servings || '4'}</span>
-                    <span class="prep-time"><i class="fas fa-clock"></i>${recipe.cookTimeMinutes} min</span>
-                    <span class="difficulty"><i class="fas fa-chart-line"></i>${recipe.difficulty || 'Easy'}</span>
-                    <span class="rating"><i class="fas fa-star"></i>${recipe.rating?.toFixed(1) || '0.0'}</span>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">${recipe.name}</h3>
+                    <div class="recipe-tags">
+                        ${recipe.tags?.slice(0, 2).map(tag => `<span class="tag">${tag}</span>`).join('') || ''}
+                        <span class="meal-type-badge">${recipe.mealType}</span>
+                    </div>
+                    <div class="recipe-meta">
+                        <span class="servings"><i class="fas fa-users" aria-hidden="true"></i>${recipe.servings || '4'}</span>
+                        <span class="prep-time"><i class="fas fa-clock" aria-hidden="true"></i>${recipe.cookTimeMinutes} min</span>
+                        <span class="difficulty"><i class="fas fa-chart-line" aria-hidden="true"></i>${recipe.difficulty || 'Easy'}</span>
+                        <span class="rating"><i class="fas fa-star" aria-hidden="true"></i>${recipe.rating?.toFixed(1) || '0.0'}</span>
+                    </div>
                 </div>
-            </div>
+            </a>
         `;
         
         container.appendChild(article);

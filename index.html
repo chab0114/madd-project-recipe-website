@@ -50,7 +50,7 @@
                 <div class="hero-content">
                     <h1>Welcome to Dev-licious!</h1>
                     <p class="hero-text">Here you'll find dev-licious recipes for all occasions, all you have to do is fetch them!</p>
-                    <a href="#" class="cta-button">Today's Pick</a>
+                    <a href="#" class="cta-button" aria-label="View today's featured recipe">Today's Pick</a>
                 </div>
             </div>
         </header>
@@ -71,7 +71,10 @@
         <section class="newsletter">
             <div class="container">
                 <div class="newsletter-content">
-                    <h2></h2>
+                    <h2>
+                        <span>Sign up for the</span>
+                        <span>Dev-licious newsletter!</span>
+                    </h2>
                     <p>Interested in receiving great cooking tips, deals on amazing ingredients, and the latest and greatest recipes right in your inbox? If so, sign up today!</p>
                     
                     <form action="https://formspree.io/f/xkgnakoo" method="POST" class="newsletter-form" id="newsletter-form">
@@ -125,9 +128,9 @@
         </div>
     </footer>
 
-    <a href="#" id="back-to-top" class="back-to-top">
-        <i class="fas fa-arrow-up"></i>
-    </a>
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top of page" type="button">
+        <i class="fas fa-arrow-up" aria-hidden="true"></i>
+    </button>
 
 </body>
 </html>
