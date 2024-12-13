@@ -55,6 +55,7 @@ export async function initializeHomePage() {
         const recipes = await fetchTopRecipes();
         displayRecipes(recipes, recipeGrid);
     } catch (error) {
+        console.error('Error initializing home page:', error); 
         recipeGrid.innerHTML = '<p class="error">Failed to load recipes. Please try again later.</p>';
     }
 }

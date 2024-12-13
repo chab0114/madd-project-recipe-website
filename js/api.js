@@ -84,17 +84,35 @@ export async function searchRecipes(query) {
 
 export async function fetchTopRecipes(limit = 6) {
     try {
-        const response = await fetch(`${API_BASE_URL}?limit=${limit}&select=id,name,image,rating,cookTimeMinutes,tags,difficulty,servings`);
+       
+        const recentlyViewed = getRecentlyViewed(limit);
+        console.log('Recently viewed:', recentlyViewed);
+        
+        
+        if (recentlyViewed.length >= limit) {
+            return recentlyViewed.slice(0, limit);
+        }
+        
+        
+        const remainingCount = limit - recentlyViewed.length;
+        const response = await fetch(`${API_BASE_URL}?limit=20`);
         if (!response.ok) throw new Error('Failed to fetch recipes');
         const data = await response.json();
         
-        const recipesWithMealType = data.recipes.map(recipe => ({
-            ...recipe,
-            mealType: assignMealType(recipe)
-        }));
         
-        return recipesWithMealType;
+        const existingIds = recentlyViewed.map(r => r.id);
+        const additionalRecipes = data.recipes
+            .filter(recipe => !existingIds.includes(recipe.id))
+            .map(recipe => ({
+                ...recipe,
+                mealType: assignMealType(recipe)
+            }))
+            .slice(0, remainingCount);
+        
+        
+        return [...recentlyViewed, ...additionalRecipes];
     } catch (error) {
+        console.error('Error in fetchTopRecipes:', error);
         throw error;
     }
 }
