@@ -42,39 +42,77 @@ function displayRecipes(recipes, container) {
     });
 }
 
+
+let cachedBorschtRecipe = null;
+
 async function initializeTodaysPick() {
     const todaysPickButton = document.querySelector('.cta-button');
     if (!todaysPickButton) return;
 
+   
+    todaysPickButton.disabled = true;
+    const originalText = todaysPickButton.textContent;
+    todaysPickButton.textContent = 'Loading...';
+
     try {
         
-        const recipes = await fetchTopRecipes(100);
-        const borschtRecipe = recipes.find(recipe => 
-            recipe.name.toLowerCase().includes('borscht') || 
-            recipe.name.toLowerCase().includes('borsch')
-        );
+        if (!cachedBorschtRecipe) {
+            const recipes = await fetchTopRecipes(100);
+            cachedBorschtRecipe = recipes.find(recipe => 
+                recipe.name.toLowerCase().includes('borscht') || 
+                recipe.name.toLowerCase().includes('borsch')
+            );
 
-        if (borschtRecipe) {
-            
-            borschtRecipe.name = "Ukrainian Borscht";
-            if (borschtRecipe.tags) {
-                borschtRecipe.tags = borschtRecipe.tags.map(tag => 
-                    tag === "Russian" ? "Ukrainian" : tag
-                );
+            if (cachedBorschtRecipe) {
+             
+                cachedBorschtRecipe.name = "Ukrainian Borscht";
+                if (cachedBorschtRecipe.tags) {
+                    cachedBorschtRecipe.tags = cachedBorschtRecipe.tags.map(tag => 
+                        tag === "Russian" ? "Ukrainian" : tag
+                    );
+                }
+
+               
+                try {
+                    await fetchRecipeById(cachedBorschtRecipe.id);
+                } catch (error) {
+                    console.warn('Failed to pre-fetch full recipe data:', error);
+                }
             }
+        }
+
+      
+        if (cachedBorschtRecipe) {
+            todaysPickButton.disabled = false;
+            todaysPickButton.textContent = originalText;
             
+          
+            todaysPickButton.replaceWith(todaysPickButton.cloneNode(true));
             
-            todaysPickButton.addEventListener('click', (e) => {
+           
+            const freshButton = document.querySelector('.cta-button');
+            
+           
+            freshButton.addEventListener('click', (e) => {
                 e.preventDefault();
-                window.location.href = `recipe.html?id=${borschtRecipe.id}`;
+                window.location.href = `recipe.html?id=${cachedBorschtRecipe.id}`;
             });
+        } else {
+            console.warn('Borscht recipe not found');
+            todaysPickButton.textContent = originalText;
+            todaysPickButton.disabled = false;
         }
     } catch (error) {
         console.error('Error setting up Today\'s Pick:', error);
+        todaysPickButton.disabled = false;
+        todaysPickButton.textContent = originalText;
     }
 }
 
 export async function initializeHomePage() {
+    
+    await initializeTodaysPick();
+    
     const recipeGrid = document.getElementById('latest-recipes');
     if (!recipeGrid) return;
 
@@ -84,7 +122,6 @@ export async function initializeHomePage() {
     try {
         const recipes = await fetchTopRecipes();
         displayRecipes(recipes, recipeGrid);
-        await initializeTodaysPick();
     } catch (error) {
         console.error('Error initializing home page:', error); 
         recipeGrid.innerHTML = '<p class="error">Failed to load recipes. Please try again later.</p>';
