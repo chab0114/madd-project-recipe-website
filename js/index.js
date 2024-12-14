@@ -21,12 +21,12 @@ function displayRecipes(recipes, container) {
             <a href="recipe.html?id=${recipe.id}" class="recipe-link">
                 <div class="recipe-image">
                     <img src="${recipe.image}" alt="${recipe.name}">
+                    <span class="meal-type-badge">${recipe.mealType}</span>
                 </div>
                 <div class="recipe-content">
                     <h3 class="recipe-title">${recipe.name}</h3>
                     <div class="recipe-tags">
                         ${recipe.tags?.slice(0, 2).map(tag => `<span class="tag">${tag}</span>`).join('') || ''}
-                        <span class="meal-type-badge">${recipe.mealType}</span>
                     </div>
                     <div class="recipe-meta">
                         <span class="servings"><i class="fas fa-users" aria-hidden="true"></i>${recipe.servings || '4'}</span>
