@@ -1122,6 +1122,13 @@ font-weight: var(--font-weight-semi-bold);
 }
 
 .pagination button {
+  /* ---------- prof comment ----------
+  
+  you should use padding to set the size of the elements
+  instead of width and height. This will be more flexible
+  for if the font-size or content changes.
+  
+  ---------- end prof comment ---------- */
   min-width: 40px;
   height: 40px;
   padding: var(--spacing-s) var(--spacing-m);
